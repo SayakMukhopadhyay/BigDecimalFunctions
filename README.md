@@ -23,6 +23,12 @@ Used to get the fraction part of a number.
 Used to get the whole part of a number.
 
 --------------------------------------------
+##Changelog
+
+###v1.0.0
+* First Release
+
+--------------------------------------------
 ##License
 
 Copyright 2016 Sayak Mukhopadhyay
