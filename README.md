@@ -14,6 +14,8 @@ Used to calculate numbers raised to the power of other numbers.
 Used to calculate the n<sup>th</sup> root of numbers.
 ###`sin()`
 Used to calculate the sine of some angle.
+###`cos()`
+Used to calculate the cosine of some angle.
 ###`sqrt()`
 Used to calculate the square root of numbers.
 ##Other Miscellaneous Functions
