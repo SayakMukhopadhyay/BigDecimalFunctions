@@ -18,17 +18,21 @@ import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+
+@RunWith(JUnitParamsRunner.class)
 public class BigDecimalFunctionsTest {
-	
+
 	private MathContext mc;
-	
+
 	public BigDecimalFunctionsTest() {
 		mc = new MathContext(32);
 	}
-	
+
 	public void printReport(Object actual, Object expected) {
 		System.out.println("----------------------------------------------------");
 		System.out.println("Required Value   : " + expected);
@@ -37,64 +41,77 @@ public class BigDecimalFunctionsTest {
 	}
 
 	@Test
-	public void testExp() {
-		BigDecimal actual = BigDecimalFunctions.exp(BigDecimal.valueOf(5), mc);
-		BigDecimal expected = new BigDecimal("148.41315910257660342111558004055");
-		System.out.println("Testing exp function with parameter as 5");
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideExp")
+	public void testExp(String param, String answer) {
+		BigDecimal actual = BigDecimalFunctions.exp(new BigDecimal(param), mc);
+		BigDecimal expected = new BigDecimal(answer);
+
+		System.out.println("Testing exp function with parameter as " + param);
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testPowLong() {
-		BigDecimal actual = BigDecimalFunctions.pow(BigDecimal.valueOf(2.5), 5, mc);
-		BigDecimal expected = new BigDecimal("97.65625");
-		System.out.println("Testing long power function with parameter as 2.5, 5");
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "providePowLong")
+	public void testPowLong(String param1, String param2, String answer) {
+		BigDecimal actual = BigDecimalFunctions.pow(new BigDecimal(param1), Long.parseLong(param2), mc);
+		BigDecimal expected = new BigDecimal(answer);
+		System.out.println("Testing long power function with parameter as " + param1 + param2);
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testLn() {
-		BigDecimal actual = BigDecimalFunctions.ln(BigDecimal.valueOf(5), mc);
-		BigDecimal expected = new BigDecimal("1.6094379124341003746007593332262");
-		System.out.println("Testing ln function with parameter as 5");
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideLn")
+	public void testLn(String param, String answer) {
+		BigDecimal actual = BigDecimalFunctions.ln(new BigDecimal(param), mc);
+		BigDecimal expected = new BigDecimal(answer);
+
+		System.out.println("Testing ln function with parameter as " + param);
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testPowBigDecimal() {
-		BigDecimal actual = BigDecimalFunctions.pow(BigDecimal.valueOf(2.5), BigDecimal.valueOf(2.5), mc);
-		BigDecimal expected = new BigDecimal("9.8821176880261854124965423263522");
-		System.out.println("Testing BigDecimal power function with parameter as 2.5, 2.5");
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "providePowBigDecimal")
+	public void testPowBigDecimal(String param1, String param2, String answer) {
+		BigDecimal actual = BigDecimalFunctions.pow(new BigDecimal(param1), new BigDecimal(param2), mc);
+		BigDecimal expected = new BigDecimal(answer);
+
+		System.out.println("Testing BigDecimal power function with parameter as " + param1 + param2);
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testSqrt() {
-		BigDecimal actual = BigDecimalFunctions.sqrt(BigDecimal.valueOf(5), mc);
-		BigDecimal expected = new BigDecimal("2.2360679774997896964091736687313");
-		System.out.println("Testing sqrt function with parameter as 5");
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideSqrt")
+	public void testSqrt(String param, String answer) {
+		BigDecimal actual = BigDecimalFunctions.sqrt(new BigDecimal(param), mc);
+		BigDecimal expected = new BigDecimal(answer);
+		System.out.println("Testing sqrt function with parameter as " + param);
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testRoot() {
-		BigDecimal actual = BigDecimalFunctions.root(BigDecimal.valueOf(5), 3, mc);
-		BigDecimal expected = new BigDecimal("1.7099759466766969893531088725439");
-		System.out.println("Testing root function with parameter as 5, 3");
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideRoot")
+	public void testRoot(String param1, String param2, String answer) {
+		BigDecimal actual = BigDecimalFunctions.root(new BigDecimal(param1), Long.parseLong(param2), mc);
+		BigDecimal expected = new BigDecimal(answer);
+
+		System.out.println("Testing root function with parameter as " + param1 + param2);
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
 
 	@Test
-	public void testSin() {
-		BigDecimal actual = BigDecimalFunctions.sin(BigDecimal.valueOf(1.5), mc);
-		BigDecimal expected = new BigDecimal("0.99749498660405443094172337114149");
-		System.out.println("Testing sin function with parameter as 1.5");
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideSin")
+	public void testSin(String param, String answer) {
+
+		BigDecimal actual = BigDecimalFunctions.sin(new BigDecimal(param), mc);
+		BigDecimal expected = new BigDecimal(answer);
+
+		System.out.println("Testing sin function with parameter as " + param);
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}

@@ -16,13 +16,14 @@ package com.kodeblox;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.lang.Math;
 import com.kodeblox.NumericalMethodsFunctions;
 
 /**
  * Mathematical functions needed for BigDecimal
  */
 public final class BigDecimalFunctions {
+
+	public static final BigDecimal PI = new BigDecimal("3.141592653589793238462643383279503");
 
 	/**
 	 * Calculates <code>e<sup>exponent</sup></code>. The result is rounded
@@ -36,7 +37,7 @@ public final class BigDecimalFunctions {
 	 */
 	public static BigDecimal exp(BigDecimal exponent, MathContext mc) {
 
-		MathContext newMc = new MathContext(mc.getPrecision() + 2);
+		MathContext newMc = new MathContext(mc.getPrecision() + 3);
 
 		// If the exponent is lesser than 0, negate the exponent, calculate
 		// the value and find the reciprocal.
@@ -194,9 +195,9 @@ public final class BigDecimalFunctions {
 			throw new IllegalArgumentException("Log requires values greater than 0");
 		}
 
-		MathContext newMc = new MathContext(mc.getPrecision() + 2);
+		MathContext newMc = new MathContext(mc.getPrecision() + 3);
 		// Calculates the number of digits in the significand.
-		long significantDigits = value.precision();
+		long wholeDigits = value.precision() - value.scale();
 		final int THRESHOLD = 3;
 
 		// If the number is within a threshold, simple Newton-Raphson is done.
@@ -204,13 +205,12 @@ public final class BigDecimalFunctions {
 		// the number is first reduced to value ^ (1 / significandDigits). Then
 		// the logarithm is calculated and then multiplied by significandDigits.
 
-		// log value = significandDigits * log value ^ (1 / significandDigits.
-		if (significantDigits < THRESHOLD) {
+		// log value = significandDigits * log value ^ (1 / significandDigits).
+		if (wholeDigits < THRESHOLD) {
 			return NumericalMethodsFunctions.lnNewtonRaphson(value, newMc).round(mc);
 		}
-		return BigDecimal.valueOf(significantDigits)
-				.multiply(NumericalMethodsFunctions.lnNewtonRaphson(root(value, significantDigits, newMc), newMc),
-						newMc)
+		return BigDecimal.valueOf(wholeDigits)
+				.multiply(NumericalMethodsFunctions.lnNewtonRaphson(root(value, wholeDigits, newMc), newMc), newMc)
 				.round(mc);
 	}
 
@@ -234,7 +234,7 @@ public final class BigDecimalFunctions {
 			return pow(base, exponent.longValue(), mc);
 		}
 
-		MathContext newMc = new MathContext(mc.getPrecision() + 2);
+		MathContext newMc = new MathContext(mc.getPrecision() + 3);
 		// The calculation is done as,
 		// base^exponent = e ^ (exponent * ln base)
 
@@ -259,7 +259,8 @@ public final class BigDecimalFunctions {
 	 * @return <code>value<sup>(1/2)</sup></code>
 	 */
 	public static BigDecimal sqrt(BigDecimal value, MathContext mc) {
-		return NumericalMethodsFunctions.sqrtNewtonRaphson(value, mc);
+		MathContext newMc = new MathContext(mc.getPrecision() + 3);
+		return NumericalMethodsFunctions.sqrtNewtonRaphson(value, newMc).round(mc);
 	}
 
 	/**
@@ -276,7 +277,8 @@ public final class BigDecimalFunctions {
 	 * @return <code>base<sup>(1/exponent)</sup></code>
 	 */
 	public static BigDecimal root(BigDecimal base, long exponent, MathContext mc) {
-		return NumericalMethodsFunctions.rootNewtonRaphson(base, exponent, mc);
+		MathContext newMc = new MathContext(mc.getPrecision() + 3);
+		return NumericalMethodsFunctions.rootNewtonRaphson(base, exponent, newMc).round(mc);
 	}
 
 	/**
@@ -291,7 +293,31 @@ public final class BigDecimalFunctions {
 	 */
 	public static BigDecimal sin(BigDecimal angle, MathContext mc) {
 
-		MathContext newMc = new MathContext(mc.getPrecision() + 2);
+		MathContext newMc = new MathContext(mc.getPrecision() + 3);
+
+		// Checking to see if the entered angle is greater than 2 * PI
+		// and reduce accordingly.
+		if (angle.compareTo(BigDecimalFunctions.PI.multiply(BigDecimal.valueOf(2), newMc)) >= 0) {
+
+			// angle = n * 2 * PI + reducedAngle
+			// n = floor(angle / 2 * PI)
+			long n = angle.divide(BigDecimalFunctions.PI.multiply(BigDecimal.valueOf(2), newMc), newMc).longValue();
+			angle = angle.subtract(BigDecimalFunctions.PI.multiply(BigDecimal.valueOf(n * 2), newMc), newMc);
+		}
+
+		// All angle values to be reduced between 0 to PI / 2
+		// for quick calculation.
+		// Checking to see if the angle is greater than PI
+		// If so reduce
+		if (angle.compareTo(BigDecimalFunctions.PI) >= 0) {
+			angle = angle.subtract(BigDecimalFunctions.PI, newMc).negate();
+		}
+
+		// Checking to see if the angle is greater than PI / 2
+		if (angle.compareTo(BigDecimalFunctions.PI.divide(BigDecimal.valueOf(2), newMc)) > 0) {
+			angle = angle.subtract(BigDecimalFunctions.PI, newMc).negate();
+		}
+
 		// Checking whether the angle is negative
 		if (angle.compareTo(BigDecimal.ZERO) < 0) {
 
@@ -302,33 +328,6 @@ public final class BigDecimalFunctions {
 		// Returns 0 for 0 rads
 		if (angle.compareTo(BigDecimal.ZERO) == 0) {
 			return BigDecimal.ZERO;
-		}
-
-		// Checking to see if the entered angle is a multiple of 2 * PI
-		// and reduce accordingly.
-		if (angle.compareTo(BigDecimal.valueOf(2 * Math.PI)) > 0) {
-
-			// angle = n * 2 * PI + reducedAngle
-			// n = floor(angle / 2 * PI)
-			long n = angle.divide(BigDecimal.valueOf(2 * Math.PI), newMc).longValue();
-			angle = angle.subtract(BigDecimal.valueOf(n * 2 * Math.PI), newMc);
-		}
-
-		// All angle values to be reduced between 0 to PI / 2
-		// for quick calculation.
-		// Checking to see if the angle is greater than PI
-		// If so reduce
-		if (angle.compareTo(BigDecimal.valueOf(Math.PI)) > 0) {
-			angle = angle.subtract(BigDecimal.valueOf(Math.PI), newMc).negate();
-
-			// Call the same function with negative angle since
-			// negative checking is at the beginning of the function
-			return sin(angle, newMc).round(mc);
-		}
-
-		// Checking to see if the angle is greater than PI / 2
-		if (angle.compareTo(BigDecimal.valueOf(Math.PI / 2)) > 0) {
-			angle = angle.subtract(BigDecimal.valueOf(Math.PI), newMc).negate();
 		}
 
 		return NumericalMethodsFunctions.sinTaylorSeries(angle, newMc).round(mc);
