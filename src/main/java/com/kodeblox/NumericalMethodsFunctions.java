@@ -196,4 +196,38 @@ public class NumericalMethodsFunctions {
 		return y;
 	}
 
+	/**
+	 * Calculates the <code>cosine</code> of an angle in <code>radians</code>
+	 * using Taylor series expansion. The result is rounded according to the
+	 * passed context <code>mc</code>.
+	 * 
+	 * @param angle
+	 *            the angle in radians.
+	 * @param mc
+	 *            rounding mode and precision for the result of this operation.
+	 * @return <code>cos (angle)</code>
+	 */
+	public static BigDecimal cosTaylorSeries(BigDecimal angle, MathContext mc) {
+		BigDecimal lastSum;
+		BigDecimal currentSum = BigDecimal.ZERO;
+		BigDecimal numerator = BigDecimal.ONE;
+		BigDecimal denominator = BigDecimal.ONE;
+		BigDecimal term;
+		int i = 0;
+		do {
+			i = i + 2;
+			lastSum = currentSum;
+
+			// term = x ^ (2 * n + 1) / (2 * n + 1)!
+			term = numerator.divide(denominator, mc);
+			currentSum = currentSum.add(term, mc);
+
+			// Negating as every alternative term is negative
+			numerator = numerator.multiply(angle, mc).multiply(angle, mc).negate();
+			denominator = denominator.multiply(BigDecimal.valueOf(i), mc).multiply(BigDecimal.valueOf(i - 1), mc);
+		} while (lastSum.compareTo(currentSum) != 0);
+
+		return currentSum;
+	}
+
 }

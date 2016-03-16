@@ -332,4 +332,57 @@ public final class BigDecimalFunctions {
 
 		return NumericalMethodsFunctions.sinTaylorSeries(angle, newMc).round(mc);
 	}
+	
+	/**
+	 * Calculates the <code>cosine</code> of an angle in <code>radians</code>. The
+	 * result is rounded according to the passed context <code>mc</code>.
+	 * 
+	 * @param angle
+	 *            the angle in radians.
+	 * @param mc
+	 *            rounding mode and precision for the result of this operation.
+	 * @return <code>cos (angle)</code>
+	 */
+	public static BigDecimal cos(BigDecimal angle, MathContext mc) {
+
+		MathContext newMc = new MathContext(mc.getPrecision() + 3);
+
+		// Checking to see if the entered angle is greater than 2 * PI
+		// and reduce accordingly.
+		if (angle.compareTo(BigDecimalFunctions.PI.multiply(BigDecimal.valueOf(2), newMc)) >= 0) {
+
+			// angle = n * 2 * PI + reducedAngle
+			// n = floor(angle / 2 * PI)
+			long n = angle.divide(BigDecimalFunctions.PI.multiply(BigDecimal.valueOf(2), newMc), newMc).longValue();
+			angle = angle.subtract(BigDecimalFunctions.PI.multiply(BigDecimal.valueOf(n * 2), newMc), newMc);
+		}
+
+		// All angle values to be reduced between 0 to PI / 2
+		// for quick calculation.
+		// Checking to see if the angle is greater than PI
+		// If so reduce
+		if (angle.compareTo(BigDecimalFunctions.PI) >= 0) {
+			angle = angle.subtract(BigDecimalFunctions.PI.multiply(BigDecimal.valueOf(2), newMc), newMc).negate();
+		}
+
+		// Checking to see if the angle is greater than PI / 2
+		if (angle.compareTo(BigDecimalFunctions.PI.divide(BigDecimal.valueOf(2), newMc)) > 0) {
+			angle = angle.subtract(BigDecimalFunctions.PI, newMc).negate();
+			return NumericalMethodsFunctions.cosTaylorSeries(angle, newMc).negate().round(mc);
+		}
+
+		// Checking whether the angle is negative
+		if (angle.compareTo(BigDecimal.ZERO) < 0) {
+
+			// Since cos(-angle) = cos(angle).
+			return cos(angle.negate(), newMc).round(mc);
+		}
+
+		// Returns 0 for 0 rads
+		if (angle.compareTo(BigDecimal.ZERO) == 0) {
+			return BigDecimal.ONE;
+		}
+
+		return NumericalMethodsFunctions.cosTaylorSeries(angle, newMc).round(mc);
+	}
 }

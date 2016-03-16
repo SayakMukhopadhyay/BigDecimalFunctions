@@ -115,4 +115,16 @@ public class BigDecimalFunctionsTest {
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
+	
+	@Test
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideCos")
+	public void testCos(String param, String answer) {
+
+		BigDecimal actual = BigDecimalFunctions.cos(new BigDecimal(param), mc);
+		BigDecimal expected = new BigDecimal(answer);
+
+		System.out.println("Testing cos function with parameter as " + param);
+		printReport(actual, expected);
+		assertEquals(expected, actual);
+	}
 }
