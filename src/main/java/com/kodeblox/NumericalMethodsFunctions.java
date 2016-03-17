@@ -230,4 +230,19 @@ public class NumericalMethodsFunctions {
 		return currentSum;
 	}
 
+	/**
+	 * Calculates the <code>tangent</code> of an angle in <code>radians</code>
+	 * using values for sine and cosine. The result is rounded according to the
+	 * passed context <code>mc</code>.
+	 * 
+	 * @param angle
+	 *            the angle in radians.
+	 * @param mc
+	 *            rounding mode and precision for the result of this operation.
+	 * @return <code>tan (angle)</code>
+	 */
+	public static BigDecimal tanCompute(BigDecimal angle, MathContext mc) {
+		return sinTaylorSeries(angle, mc).divide(cosTaylorSeries(angle, mc), mc);
+	}
+
 }

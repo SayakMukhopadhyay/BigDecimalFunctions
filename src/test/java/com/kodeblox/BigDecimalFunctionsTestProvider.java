@@ -1,3 +1,17 @@
+/*Copyright 2016 Sayak Mukhopadhyay
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
+
 package com.kodeblox;
 
 import static junitparams.JUnitParamsRunner.$;
@@ -26,6 +40,19 @@ public class BigDecimalFunctionsTestProvider {
 				$("3", "-0.98999249660044545727157279473126"),
 				$("4", "-0.65364362086361191463916818309775"), 
 				$("6", "0.96017028665036602054565229792292")
+				);
+	}
+	
+	public static Object[] provideTan() {
+		return $(
+				$("-6", "0.29100619138474915705369958886818"), 
+				$("-4", "-1.1578212823495775831373424182673"),
+				$("-3", "0.14254654307427780529563541053391"), 
+				$("-1.5", "-14.101419947171719387646083651988"),
+				$("1.5", "14.101419947171719387646083651988"), 
+				$("3", "-0.14254654307427780529563541053391"),
+				$("4", "1.1578212823495775831373424182673"), 
+				$("6", "-0.29100619138474915705369958886818")
 				);
 	}
 
@@ -76,6 +103,15 @@ public class BigDecimalFunctionsTestProvider {
 	public static Object[] provideSqrt() {
 		return $(
 				$("50.69", "7.1196910045310252916502843877933")
+				);
+	}
+	
+	public static Object[] provideFactorial() {
+		return $(
+				$("5", "120"), 
+				$("20", "2432902008176640000"),
+				$("25", "15511210043330985984000000"),
+				$("28", "304888344611713860501504000000")
 				);
 	}
 }

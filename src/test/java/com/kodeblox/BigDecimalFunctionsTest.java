@@ -127,4 +127,28 @@ public class BigDecimalFunctionsTest {
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
+	
+	@Test
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideTan")
+	public void testTan(String param, String answer) {
+
+		BigDecimal actual = BigDecimalFunctions.tan(new BigDecimal(param), mc);
+		BigDecimal expected = new BigDecimal(answer);
+
+		System.out.println("Testing tan function with parameter as " + param);
+		printReport(actual, expected);
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideFactorial")
+	public void testFactorial(String param, String answer) {
+
+		BigDecimal actual = BigDecimalFunctions.factorial(new BigDecimal(param), mc);
+		BigDecimal expected = new BigDecimal(answer);
+
+		System.out.println("Testing factorial function with parameter as " + param);
+		printReport(actual, expected);
+		assertEquals(expected, actual);
+	}
 }
