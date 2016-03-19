@@ -10,12 +10,22 @@ Used to calculate numbers raised to the power of `e`.
 Used to calculate the natural logarithm numbers.
 ###`pow()`
 Used to calculate numbers raised to the power of other numbers.
+###`factorial()`
+Used to calculate the factorial of whole numbers.
 ###`root()`
 Used to calculate the n<sup>th</sup> root of numbers.
 ###`sin()`
 Used to calculate the sine of some angle.
 ###`cos()`
 Used to calculate the cosine of some angle.
+###`tan()`
+Used to calculate the tangent of some angle.
+###`arcsin()`
+Used to calculate the sine inverse of some value.
+###`arccos()`
+Used to calculate the cosine inverse of some value.
+###`arctan()`
+Used to calculate the tangent inverse of some value.
 ###`sqrt()`
 Used to calculate the square root of numbers.
 ##Other Miscellaneous Functions
