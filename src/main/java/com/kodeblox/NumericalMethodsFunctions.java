@@ -245,4 +245,74 @@ public class NumericalMethodsFunctions {
 		return sinTaylorSeries(angle, mc).divide(cosTaylorSeries(angle, mc), mc);
 	}
 
+	/**
+	 * Calculates the <code>arcsine</code> of a value in <code>radians</code>
+	 * using arctan of the value. The result is rounded according to the passed
+	 * context <code>mc</code>.
+	 * 
+	 * @param value
+	 *            the number whose arcsine is to be found.
+	 * @param mc
+	 *            rounding mode and precision for the result of this operation.
+	 * @return <code>sin<sup>-1</sup>(value)</code>
+	 */
+	public static BigDecimal arcsinCompute(BigDecimal value, MathContext mc) {
+
+		return BigDecimalFunctions.arctan(
+				value.divide(BigDecimalFunctions.sqrt(BigDecimal.ONE.subtract(value.multiply(value, mc), mc), mc), mc),
+				mc);
+	}
+
+	/**
+	 * Calculates the <code>arccosine</code> of a value in <code>radians</code>
+	 * using arctan of the value. The result is rounded according to the passed
+	 * context <code>mc</code>.
+	 * 
+	 * @param value
+	 *            the number whose arccosine is to be found.
+	 * @param mc
+	 *            rounding mode and precision for the result of this operation.
+	 * @return <code>cos<sup>-1</sup>(value)</code>
+	 */
+	public static BigDecimal arccosCompute(BigDecimal value, MathContext mc) {
+
+		return BigDecimalFunctions.arctan(
+				BigDecimalFunctions.sqrt(BigDecimal.ONE.subtract(value.multiply(value, mc), mc), mc).divide(value, mc),
+				mc);
+	}
+
+	/**
+	 * Calculates the <code>arctangent</code> of a value in <code>radians</code>
+	 * using Taylor series expansion. The result is rounded according to the
+	 * passed context <code>mc</code>.
+	 * 
+	 * @param value
+	 *            the number whose arctangent is to be found.
+	 * @param mc
+	 *            rounding mode and precision for the result of this operation.
+	 * @return <code>tan<sup>-1</sup>(value)</code>
+	 */
+	public static BigDecimal arctanTaylorSeries(BigDecimal value, MathContext mc) {
+		BigDecimal lastSum;
+		BigDecimal currentSum = BigDecimal.ZERO;
+		BigDecimal numerator = value;
+		BigDecimal denominator = BigDecimal.ONE;
+		BigDecimal term;
+		int i = 0;
+		do {
+			i++;
+			lastSum = currentSum;
+
+			// term = x ^ (2 * n + 1) / (2 * n + 1)!
+			term = numerator.divide(denominator, mc);
+			currentSum = currentSum.add(term, mc);
+
+			// Negating as every alternative term is negative
+			numerator = numerator.multiply(value, mc).multiply(value, mc).negate();
+			denominator = BigDecimal.valueOf(2 * i + 1);
+		} while (lastSum.compareTo(currentSum) != 0);
+
+		return currentSum;
+	}
+
 }

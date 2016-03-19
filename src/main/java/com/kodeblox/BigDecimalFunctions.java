@@ -396,6 +396,8 @@ public final class BigDecimalFunctions {
 	 * @param mc
 	 *            rounding mode and precision for the result of this operation.
 	 * @return <code>tan (angle)</code>
+	 * @throws ArithmaticException
+	 *             if <code>angle = PI / 2</code> (or its odd multiple).
 	 */
 	public static BigDecimal tan(BigDecimal angle, MathContext mc) {
 
@@ -427,7 +429,7 @@ public final class BigDecimalFunctions {
 
 		// Checking whether the angle is PI / 2
 		if (angle.compareTo(BigDecimalFunctions.PI.divide(BigDecimal.valueOf(2), newMc)) == 0) {
-			throw new ArithmeticException();
+			throw new ArithmeticException("The Angle is an odd multiple of PI / 2");
 		}
 
 		// Checking whether the angle is negative
@@ -450,15 +452,144 @@ public final class BigDecimalFunctions {
 	 * according to the passed context <code>mc</code>.
 	 * 
 	 * @param value
-	 *            the number whose factorial is to be found
+	 *            the number whose factorial is to be found.
 	 * @param mc
 	 *            rounding mode and precision for the result of this operation.
 	 * @return <code>value!</code>
 	 */
 	public static BigDecimal factorial(BigDecimal value, MathContext mc) {
 
+		MathContext newMc = new MathContext(mc.getPrecision() + 3);
+
 		// Using Google's Guava library for factorial.
 		// Feeling too lazy to write my own :-D.
-		return new BigDecimal(BigIntegerMath.factorial(Integer.parseInt(value.toString())).toString(), mc);
+		return new BigDecimal(BigIntegerMath.factorial(Integer.parseInt(value.toString())).toString(), newMc).round(mc);
+	}
+
+	/**
+	 * Calculates the <code>arcsine</code> of the given value. The result is
+	 * rounded according to the passed context <code>mc</code>.
+	 * 
+	 * @param value
+	 *            the number whose arcsine is to be found.
+	 * @param mc
+	 *            rounding mode and precision for the result of this operation.
+	 * @return <code>sin<sup>-1</sup>(value)</code>
+	 * @throws IllegalArgumentException
+	 *             if <code>value >= 1</code> and <code>value <= -1</code>.
+	 */
+	public static BigDecimal arcsin(BigDecimal value, MathContext mc) {
+
+		// Sin can give maximum value of 1. Thus arcsin cannot calculate values
+		// greater than 1.
+		if (value.abs().compareTo(BigDecimal.ONE) > 0) {
+			throw new IllegalArgumentException("Arcsin requires values lesser than equal to 1");
+		}
+
+		// Since arcsin(-value) = -arcsin(value).
+		if (value.compareTo(BigDecimal.ZERO) < 0) {
+			return arcsin(value.negate(), mc).negate();
+		}
+
+		MathContext newMc = new MathContext(mc.getPrecision() + 3);
+
+		// arcsin(1) = PI / 2
+		if (value.compareTo(BigDecimal.ONE) == 0) {
+			return BigDecimalFunctions.PI.divide(BigDecimal.valueOf(2), newMc).round(mc);
+		}
+
+		// arcsin(0) = 0
+		if (value.compareTo(BigDecimal.ZERO) == 0) {
+			return BigDecimal.ZERO;
+		}
+
+		return NumericalMethodsFunctions.arcsinCompute(value, newMc).round(mc);
+	}
+	
+	/**
+	 * Calculates the <code>arccosine</code> of the given value. The result is
+	 * rounded according to the passed context <code>mc</code>.
+	 * 
+	 * @param value
+	 *            the number whose arccosine is to be found.
+	 * @param mc
+	 *            rounding mode and precision for the result of this operation.
+	 * @return <code>cos<sup>-1</sup>(value)</code>
+	 * @throws IllegalArgumentException
+	 *             if <code>value >= 1</code> and <code>value <= -1</code>.
+	 */
+	public static BigDecimal arccos(BigDecimal value, MathContext mc) {
+
+		// Cos can give maximum value of 1. Thus arccos cannot calculate values
+		// greater than 1.
+		if (value.abs().compareTo(BigDecimal.ONE) > 0) {
+			throw new IllegalArgumentException("Arccos requires values lesser than equal to 1");
+		}
+
+		MathContext newMc = new MathContext(mc.getPrecision() + 3);
+
+		// Since arccos(-value) = -arccos(value).
+		if (value.compareTo(BigDecimal.ZERO) < 0) {
+			return BigDecimalFunctions.PI.subtract(arccos(value.negate(), mc), mc);
+		}
+
+		// arccos(1) = 0
+		if (value.compareTo(BigDecimal.ONE) == 0) {
+			return BigDecimal.ZERO;
+		}
+
+		// arccos(0) = PI / 2
+		if (value.compareTo(BigDecimal.ZERO) == 0) {
+			return BigDecimalFunctions.PI.divide(BigDecimal.valueOf(2), newMc).round(mc);
+		}
+
+		return NumericalMethodsFunctions.arccosCompute(value, newMc).round(mc);
+	}
+
+	/**
+	 * Calculates the <code>arctangent</code> of the given value. The result is
+	 * rounded according to the passed context <code>mc</code>.
+	 * 
+	 * @param value
+	 *            the number whose arctangent is to be found.
+	 * @param mc
+	 *            rounding mode and precision for the result of this operation.
+	 * @return <code>tan<sup>-1</sup>(value)</code>
+	 */
+	public static BigDecimal arctan(BigDecimal value, MathContext mc) {
+
+		// Since arctan(-value) = -arctan(value).
+		if (value.compareTo(BigDecimal.ZERO) < 0) {
+			return arctan(value.negate(), mc).negate();
+		}
+
+		// For values greater than 1, arctan converges veryyyyyy slowly.
+		// So arctan(value) = PI / 2 - arctan(1 / value) is used.
+		if (value.compareTo(BigDecimal.ONE) > 0) {
+			return BigDecimalFunctions.PI.divide(BigDecimal.valueOf(2), mc)
+					.subtract(arctan(BigDecimal.ONE.divide(value, mc), mc), mc);
+		}
+
+		MathContext newMc = new MathContext(mc.getPrecision() + 3);
+
+		// arctan(0) = 0
+		if (value.compareTo(BigDecimal.ZERO) == 0) {
+			return BigDecimal.ZERO;
+		}
+
+		// For faster convergence we reduce the value using the identity
+		// arctan(value) = PI / 6 + arctan((sqrt(3) * value - 1) / (sqrt(3) + 1))
+		// when value is lesser than 2 - sqrt(3).
+		BigDecimal rootThree = BigDecimalFunctions.sqrt(BigDecimal.valueOf(3), newMc);
+
+		if (value.compareTo(BigDecimal.valueOf(2).subtract(rootThree, newMc)) > 0) {
+
+			value = rootThree.multiply(value, newMc).subtract(BigDecimal.ONE, newMc).divide(rootThree.add(value, newMc),
+					newMc);
+			return NumericalMethodsFunctions.arctanTaylorSeries(value, newMc)
+					.add(BigDecimalFunctions.PI.divide(BigDecimal.valueOf(6), newMc), newMc).round(mc);
+		}
+
+		return NumericalMethodsFunctions.arctanTaylorSeries(value, newMc).round(mc);
 	}
 }

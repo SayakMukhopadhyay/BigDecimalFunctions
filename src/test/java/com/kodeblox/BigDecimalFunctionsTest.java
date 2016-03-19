@@ -115,7 +115,7 @@ public class BigDecimalFunctionsTest {
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideCos")
 	public void testCos(String param, String answer) {
@@ -127,7 +127,7 @@ public class BigDecimalFunctionsTest {
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideTan")
 	public void testTan(String param, String answer) {
@@ -139,7 +139,7 @@ public class BigDecimalFunctionsTest {
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
-	
+
 	@Test
 	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideFactorial")
 	public void testFactorial(String param, String answer) {
@@ -148,6 +148,42 @@ public class BigDecimalFunctionsTest {
 		BigDecimal expected = new BigDecimal(answer);
 
 		System.out.println("Testing factorial function with parameter as " + param);
+		printReport(actual, expected);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideArcsin")
+	public void testArcsin(String param, String answer) {
+
+		BigDecimal actual = BigDecimalFunctions.arcsin(new BigDecimal(param), mc);
+		BigDecimal expected = new BigDecimal(answer);
+
+		System.out.println("Testing arcsin function with parameter as " + param);
+		printReport(actual, expected);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideArccos")
+	public void testArccos(String param, String answer) {
+
+		BigDecimal actual = BigDecimalFunctions.arccos(new BigDecimal(param), mc);
+		BigDecimal expected = new BigDecimal(answer);
+
+		System.out.println("Testing arccos function with parameter as " + param);
+		printReport(actual, expected);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	@Parameters(source = BigDecimalFunctionsTestProvider.class, method = "provideArctan")
+	public void testArctan(String param, String answer) {
+
+		BigDecimal actual = BigDecimalFunctions.arctan(new BigDecimal(param), mc);
+		BigDecimal expected = new BigDecimal(answer);
+
+		System.out.println("Testing arctan function with parameter as " + param);
 		printReport(actual, expected);
 		assertEquals(expected, actual);
 	}
