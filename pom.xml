@@ -5,6 +5,7 @@
 	<artifactId>BigDecimalFunctions</artifactId>
 	<version>1.1.0</version>
 	<name>Big Decimal Functions</name>
+	<inceptionYear>2016</inceptionYear>
 	<description>Mathematical functions needed for BigDecimal</description>
 
 	<url>http://kodeblox.com</url>
@@ -15,6 +16,17 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 
 	<developers>
 		<developer>
@@ -28,7 +40,7 @@
 	<scm>
 		<connection>scm:git:git@github.com:SayakMukhopadhyay/BigDecimalFunctions.git</connection>
 		<developerConnection>scm:git:git@github.com:SayakMukhopadhyay/BigDecimalFunctions.git</developerConnection>
-		<url>git@github.com:SayakMukhopadhyay/BigDecimalFunctions.git</url>
+		<url>https://github.com/SayakMukhopadhyay/BigDecimalFunctions/tree/master</url>
 	</scm>
 
 	<dependencies>
@@ -50,4 +62,49 @@
 			<version>19.0</version>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
