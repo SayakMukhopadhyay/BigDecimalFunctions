@@ -40,6 +40,24 @@ Used to get the whole part of a number.
 ###v1.0.0
 * First Release
 
+###v1.1.0
+* Second Release
+
+Functions Added
+
+* `factorial()`
+Used to calculate the factorial of whole numbers.
+* `cos()`
+Used to calculate the cosine of some angle.
+* `tan()`
+Used to calculate the tangent of some angle.
+* `arcsin()`
+Used to calculate the sine inverse of some value.
+* `arccos()`
+Used to calculate the cosine inverse of some value.
+* `arctan()`
+Used to calculate the tangent inverse of some value.
+
 --------------------------------------------
 ##License
 

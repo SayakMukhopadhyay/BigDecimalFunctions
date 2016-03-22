@@ -3,9 +3,34 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.kodeblox</groupId>
 	<artifactId>BigDecimalFunctions</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<name>Big Decimal Functions</name>
 	<description>Mathematical functions needed for BigDecimal</description>
+
+	<url>http://kodeblox.com</url>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Sayak Mukhopadhyay</name>
+			<email>mukhopadhyaysayak@gmail.com</email>
+			<organization>Kodeblox</organization>
+			<organizationUrl>http://kodeblox.com</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:SayakMukhopadhyay/BigDecimalFunctions.git</connection>
+		<developerConnection>scm:git:git@github.com:SayakMukhopadhyay/BigDecimalFunctions.git</developerConnection>
+		<url>git@github.com:SayakMukhopadhyay/BigDecimalFunctions.git</url>
+	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
